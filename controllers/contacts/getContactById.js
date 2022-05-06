@@ -9,7 +9,7 @@ const getContactById = async (req, res, next) => {
     const isValid = isValidObjectId(id);
     if (!isValid) throwError("Not found", 404);
 
-    const contact = await service.getContactById(id);
+    const contact = await service.getContactById(id, req.user._id);
     if (!contact) throwError("Not found", 404);
     res.json({ status: "success", code: 200, data: { contact } });
   } catch (error) {
