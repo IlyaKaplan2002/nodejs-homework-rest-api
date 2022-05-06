@@ -25,7 +25,7 @@ const login = joi.object({
 const updateSubscription = joi.object({
   subscription: joi
     .string()
-    .valueOf(...subscriptions)
+    .valid(...subscriptions)
     .required(),
 });
 
