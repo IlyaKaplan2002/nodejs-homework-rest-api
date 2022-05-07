@@ -9,7 +9,7 @@ const removeContact = async (req, res, next) => {
     const isValid = isValidObjectId(id);
     if (!isValid) throwError("Not found", 404);
 
-    const result = await service.removeContact(id);
+    const result = await service.removeContact(id, req.user._id);
     if (!result) throwError("Not found", 404);
     res.json({
       status: "success",

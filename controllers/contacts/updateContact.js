@@ -1,7 +1,7 @@
 const { isValidObjectId } = require("mongoose");
 
 const service = require("../../service/contacts");
-const { contactsSchemas } = require("../../models");
+const { contactSchemas } = require("../../models");
 const { throwError } = require("../../helpers");
 
 const updateContact = async (req, res, next) => {
@@ -10,12 +10,10 @@ const updateContact = async (req, res, next) => {
     const isValid = isValidObjectId(id);
     if (!isValid) throwError("Not found", 404);
 
-    const { value, error } = contactsSchemas.updateContactSchema.validate(
-      req.body
-    );
+    const { value, error } = contactSchemas.update.validate(req.body);
     if (error) throwError(error.message, 400);
 
-    const contact = await service.updateContact(id, value);
+    const contact = await service.updateContact(id, req.user._id, value);
     if (!contact) throwError("Not found", 404);
     res.json({
       status: "success",
