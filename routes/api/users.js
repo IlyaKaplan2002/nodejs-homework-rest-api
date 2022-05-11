@@ -1,10 +1,12 @@
 const express = require("express");
 const ctrlUser = require("../../controllers/users");
-const { auth } = require("../../middlewares");
+const { auth, upload } = require("../../middlewares");
 
 const router = express.Router();
 
 router.patch("/", auth, ctrlUser.updateSubscription);
+
+router.patch("/avatar", auth, upload.single("avatar"), ctrlUser.updateAvatar);
 
 router.post("/signup", ctrlUser.signUp);
 

@@ -2,6 +2,7 @@ const service = require("../../service/users");
 const { userSchemas } = require("../../models");
 const { throwError } = require("../../helpers");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 
 const signUp = async (req, res, next) => {
   try {
@@ -16,9 +17,11 @@ const signUp = async (req, res, next) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const avatarURL = gravatar.url(email);
     const newUser = await service.addUser({
       email,
       password: hashedPassword,
+      avatarURL,
     });
     res.status(201).json({
       status: "success",
