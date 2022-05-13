@@ -1,6 +1,6 @@
 const { User } = require("../schemas");
 
-const updateSubscription = async (userId, body) =>
+const updateUser = async (userId, body) =>
   User.findByIdAndUpdate(userId, body, { new: true });
 
-module.exports = updateSubscription;
+module.exports = updateUser;

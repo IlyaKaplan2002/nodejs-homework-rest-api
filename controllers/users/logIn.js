@@ -20,7 +20,7 @@ const logIn = async (req, res, next) => {
 
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
-      throw throwError(401, "Password is wrong");
+      throw throwError("Password is wrong", 401);
     }
 
     const token = jwt.sign({ id: user._id }, SECRET, {

@@ -7,7 +7,7 @@ const updateSubscription = async (req, res, next) => {
     const { value, error } = userSchemas.updateSubscription.validate(req.body);
     if (error) throwError(error.message, 400);
 
-    const { email, subscription } = await service.updateSubscription(
+    const { email, subscription } = await service.updateUser(
       req.user._id,
       value
     );
