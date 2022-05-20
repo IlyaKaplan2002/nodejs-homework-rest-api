@@ -1,34 +1,24 @@
 const service = require("../../service/users");
 const { userSchemas } = require("../../models");
 const { throwError, sendMail } = require("../../helpers");
-const bcrypt = require("bcryptjs");
-const gravatar = require("gravatar");
 const { nanoid } = require("nanoid");
 
 const { DOMAIN } = process.env;
 
-const signUp = async (req, res, next) => {
+const sendVerifyEmail = async (req, res, next) => {
   try {
     const {
-      value: { email, password },
+      value: { email },
       error,
-    } = userSchemas.signup.validate(req.body);
+    } = userSchemas.verifyEmail.validate(req.body);
     if (error) throwError(error.message, 400);
 
     const user = await service.getUserByEmail(email);
-    if (user) throwError("Email in use", 409);
+    if (!user) throwError("User not found", 404);
+
+    if (user.verify) throwError("Verification has already been passed", 400);
 
     const verificationToken = nanoid();
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const avatarURL = gravatar.url(email);
-    const newUser = await service.addUser({
-      verificationToken,
-      email,
-      password: hashedPassword,
-      avatarURL,
-    });
 
     const mail = {
       to: email,
@@ -40,13 +30,15 @@ const signUp = async (req, res, next) => {
             </a>`,
     };
 
+    await service.updateUser(user._id, { verificationToken });
+
     await sendMail(mail);
 
-    res.status(201).json({
+    res.json({
       status: "success",
-      code: 201,
+      code: 200,
       data: {
-        user: { email: newUser.email, subscription: newUser.subscription },
+        message: "Verification email sent",
       },
     });
   } catch (error) {
@@ -54,4 +46,4 @@ const signUp = async (req, res, next) => {
   }
 };
 
-module.exports = signUp;
+module.exports = sendVerifyEmail;

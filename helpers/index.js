@@ -1,3 +1,4 @@
 const throwError = require("./throwError");
+const sendMail = require("./sendMail");
 
-module.exports = { throwError };
+module.exports = { throwError, sendMail };

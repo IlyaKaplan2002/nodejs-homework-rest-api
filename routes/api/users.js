@@ -16,4 +16,8 @@ router.get("/logout", auth, ctrlUser.logOut);
 
 router.get("/current", auth, ctrlUser.getCurrent);
 
+router.post("/verify", ctrlUser.sendVerifyEmail);
+
+router.get("/verify/:verificationToken", ctrlUser.verifyEmail);
+
 module.exports = router;
