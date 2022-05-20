@@ -29,4 +29,13 @@ const updateSubscription = joi.object({
     .required(),
 });
 
-module.exports = { signup, login, updateSubscription };
+const verifyEmail = joi.object({
+  email: joi
+    .string()
+    .email({
+      minDomainSegments: 2,
+    })
+    .required(),
+});
+
+module.exports = { signup, login, updateSubscription, verifyEmail };
